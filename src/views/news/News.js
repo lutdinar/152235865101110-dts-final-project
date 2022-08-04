@@ -1,10 +1,43 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { Link } from "react-router-dom";
 import CardNews from "../../components/CardNews";
 import Footer from "../../templates/frontend/Footer";
 import Header from "../../templates/frontend/Header";
+import axios from "axios";
 
 function News(props) {
+	const BASE_URL_API	= "http://127.0.0.1/putr/api/v1/";
+	const [news, setNews] = useState([]);
+	const [lastNews, setLastNews]	= useState([]);
+	const [categories, setCategories]	= useState([]);
+
+	const getNews = () => {
+        const API = `https://putr-dev.sumedangkab.go.id/admin/api/v1/news`;
+        axios.get(API)
+            .then(function (response) {
+                // handle success
+				setNews(response.data.news);
+            })
+            .catch(function (error) {
+                // handle error
+                console.log(error);
+            });
+	};
+
+	const getCategories = () => {
+		const API = `https://putr-dev.sumedangkab.go.id/admin/api/v1/category`
+		axios.get(API)
+			.then((response) => setCategories(response.data.category))
+			.catch((error) => console.log(error));
+	}
+
+    useEffect(() => {
+        return () => {
+            getNews();
+            getCategories();
+        };
+    }, []);
+
 	return (
 		<div>
 			<Header />
@@ -44,19 +77,15 @@ function News(props) {
 					<div class="container">
 						<div class="row">
 							<div class="col-xl-8 col-lg-8 m-b50">
-								<CardNews
-									image="thum3.jpg"
-									createdBy="Admin"
-									tags="Infrastruktur"
-									slug="title-1"
-								/>
-
-								<CardNews
-									image="thum3.jpg"
-									createdBy="Admin"
-									tags="Bina Marga"
-									slug="title-2"
-								/>
+                                {news.map((newdata) => (
+                                	<CardNews key={newdata.id} data={newdata} />
+                                ))}
+								{/*<CardNews*/}
+								{/*	image="thum3.jpg"*/}
+								{/*	createdBy="Admin"*/}
+								{/*	tags="Infrastruktur"*/}
+								{/*	slug="title-1"*/}
+								{/*/>*/}
 
 								<nav
 									aria-label="Blog Pagination wow fadeInUp"
@@ -251,39 +280,39 @@ function News(props) {
 										</div>
 									</div>
 
-									<div
-										class="widget widget_tag_cloud wow fadeInRight"
-										data-wow-duration="2s"
-										data-wow-delay="1s"
-									>
-										<h2 class="widget-title">TAGS</h2>
-										<div class="tagcloud">
-											<a href="javascript:void(0);">
-												Business
-											</a>
-											<a href="javascript:void(0);">
-												News
-											</a>
-											<a href="javascript:void(0);">
-												Brand
-											</a>
-											<a href="javascript:void(0);">
-												Website
-											</a>
-											<a href="javascript:void(0);">
-												Internal
-											</a>
-											<a href="javascript:void(0);">
-												Strategy
-											</a>
-											<a href="javascript:void(0);">
-												Brand
-											</a>
-											<a href="javascript:void(0);">
-												Mission
-											</a>
-										</div>
-									</div>
+									{/*<div*/}
+									{/*	class="widget widget_tag_cloud wow fadeInRight"*/}
+									{/*	data-wow-duration="2s"*/}
+									{/*	data-wow-delay="1s"*/}
+									{/*>*/}
+									{/*	<h2 class="widget-title">TAGS</h2>*/}
+									{/*	<div class="tagcloud">*/}
+									{/*		<a href="javascript:void(0);">*/}
+									{/*			Business*/}
+									{/*		</a>*/}
+									{/*		<a href="javascript:void(0);">*/}
+									{/*			News*/}
+									{/*		</a>*/}
+									{/*		<a href="javascript:void(0);">*/}
+									{/*			Brand*/}
+									{/*		</a>*/}
+									{/*		<a href="javascript:void(0);">*/}
+									{/*			Website*/}
+									{/*		</a>*/}
+									{/*		<a href="javascript:void(0);">*/}
+									{/*			Internal*/}
+									{/*		</a>*/}
+									{/*		<a href="javascript:void(0);">*/}
+									{/*			Strategy*/}
+									{/*		</a>*/}
+									{/*		<a href="javascript:void(0);">*/}
+									{/*			Brand*/}
+									{/*		</a>*/}
+									{/*		<a href="javascript:void(0);">*/}
+									{/*			Mission*/}
+									{/*		</a>*/}
+									{/*	</div>*/}
+									{/*</div>*/}
 								</aside>
 							</div>
 						</div>
